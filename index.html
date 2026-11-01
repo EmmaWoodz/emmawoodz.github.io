@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Highlights Tab · 7.css Button + Spotlight</title>
+
+<link rel="stylesheet" href="https://unpkg.com/7.css">
+
+<style>
+  /* ============================================================
+     覆盖 7.css 变量（窗口与按钮配色）
+     ============================================================ */
+  :root {
+    --w7-w-titlebar-bg: linear-gradient(to bottom, #a8d8f0 0%, #6bb5e0 50%, #4a9fd4 100%);
+    --w7-w-titlebar-color: #ffffff;
+    --w7-w-bg: rgba(240, 249, 255, 0.55);
+    --w7-w-border-color: rgba(255, 255, 255, 0.8);
+
+    --w7-button-bg: linear-gradient(to bottom, #73c8f8 0%, #1583d7 50%, #0361a3 50%, #299eef 100%);
+    --w7-button-hover-bg: linear-gradient(to bottom, #8ad6ff 0%, #2a95e5 50%, #0a73b8 50%, #3aaeff 100%);
+    --w7-button-active-bg: linear-gradient(to bottom, #0361a3 0%, #1583d7 100%);
+    --w7-button-color: #ffffff;
+    --w7-button-border-color: #024b7f;
+  }
+
+  /* ============================================================
+     页面基础
+     ============================================================ */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 55%, #98FB98 100%);
+    background-attachment: fixed;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    color: #1a3a4a;
+    padding: 34px 15px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  /* ============================================================
+     顶部欢迎图（引用仓库根目录的 welcome.png）
+     ============================================================ */
+  .welcome-header {
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .welcome-banner {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 8px 16px rgba(10, 74, 112, 0.22));
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  /* ============================================================
+     主窗口（略微下移，与顶部图片之间留出呼吸感）
+     ============================================================ */
+  .main-window {
+    width: 100%;
+    max-width: 960px;
+    margin-top: 28px;
+  }
+  .main-window .window-body {
+    padding: 20px 22px 28px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .vrtc_dlHeader {
+    font-size: 1.1rem;
+    color: #0a4a70;
+    margin: 16px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(10, 74, 112, 0.15);
+  }
+
+  /* ============================================================
+     highlightsTab 结构
+     ============================================================ */
+  .vt_col_cntnr { display: flex; flex-wrap: wrap; gap: 20px; }
+  .vt_lay60 { flex: 1 1 0; min-width: 0; }
+  .vt_lay40 { flex: 0 0 240px; }
+
+  .vt_linklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .featureItem {
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    padding: 12px 14px;
+    transition: background 0.2s ease;
+  }
+  .featureItem:hover { background: rgba(255, 255, 255, 0.6); }
+
+  .vt_headline { display: flex; gap: 12px; align-items: flex-start; }
+  .vt_imgBorder {
+    flex-shrink: 0;
+    width: 63px; height: 63px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+  }
+  .vt_imgBorder img { width: 63px; height: 63px; object-fit: contain; }
+
+  .vt_desc { flex: 1; min-width: 0; }
+
+  /* 关键修复：用 > 限定直接子 span，避免误伤 <a>/<button> 内部的 .spotlight-label */
+  .vt_desc > span {
+    display: block;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #3a5a6a;
+    margin-top: 4px;
+  }
+
+  .secondary_links { list-style: none; margin-top: 6px; }
+
+  /* ============================================================
+     ★ 聚光灯：公共样式
+     ============================================================ */
+  .spotlight-btn {
+    position: relative;
+    --spotlight-color: rgba(179, 224, 255, 0.55);
+    --spotlight-radius: 25%;
+  }
+
+  .spotlight-layer {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at var(--x, 50%) var(--y, 50%),
+      var(--spotlight-color) 0%,
+      transparent var(--spotlight-radius)
+    );
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .spotlight-btn:hover .spotlight-layer { opacity: 1; }
+
+  .spotlight-label {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ============================================================
+     ★ 标题链接（<a>）的原样式
+     ============================================================ */
+  a.spotlight-btn {
+    display: inline-block;
+    text-decoration: none;
+    color: #0a4a70;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    max-width: 100%;
+  }
+  a.spotlight-btn:hover { text-decoration: underline; }
+
+  /* ============================================================
+     ★ 按钮（<button>）的文字居中修复
+     7.css 按钮内部为 flex 布局，需显式设置居中
+     ============================================================ */
+  button.spotlight-btn {
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* ============================================================
+     响应式
+     ============================================================ */
+  @media (max-width: 700px) {
+    .vt_col_cntnr { flex-direction: column; }
+    .vt_lay40 { flex: 1 1 auto; width: 100%; }
+    .welcome-header { max-width: 100%; }
+    .main-window { margin-top: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部欢迎图：直接引用仓库根目录的 welcome.png（GitHub Pages 根路径） -->
+<div class="welcome-header">
+  <img class="welcome-banner"
+       src="/welcome.png"
+       alt="Welcome"
+       onerror="this.closest('.welcome-header').style.display='none'">
+</div>
+
+<div class="main-window window">
+  <div class="title-bar">
+    <div class="title-bar-text">About Emma/CornBoom!</div>
+    <div class="title-bar-controls">
+      <button aria-label="Minimize" class="is-minimize"></button>
+      <button aria-label="Maximize" class="is-maximize"></button>
+      <button aria-label="Close" class="is-close"></button>
+    </div>
+  </div>
+
+  <div class="window-body">
+
+    <div id="highlightsTab">
+
+      <h3 class="vrtc_dlHeader">About Emma/CornBoom!</h3>
+
+      <div class="vt_col_cntnr">
+        <div class="vt_lay60">
+
+          <!-- 项目 1：Info -->
+          <div class="vt_bulletedlist">
+            <ul class="vt_linklist">
+              <li class="featureItem">
+                <div class="vt_headline vt_image vt_desc">
+
+                  <div class="vt_imgBorder" title="CornBoom!">
+                    <a href="https://soundcloud.com/cornboom">
+                      <img src="/marketold.png" alt="Lyano Market" width="63" height="63">
+                    </a>
+                  </div>
+
+                  <div class="vt_desc">
+                    <!-- 标题链接：保持 <a>，保留 spotlight -->
+                    <a href="https://soundcloud.com/cornboom" class="spotlight-btn">
+                      <span class="spotlight-layer" aria-hidden="true"></span>
+                      <span class="spotlight-label">About Me</span>
+                    </a>
+
+                    <span>Hi, Im Emma/CornnBoom!, an artist for fun. U can find my arts on Soundcloud/Neteasy music.</span>
+
+                    <ul class="secondary_links">
+                      <li>
+                        <!-- 操作按钮：7.css <button>，文字居中 -->
+                        <button type="button"
+                                class="spotlight-btn"
+                                data-href="https://soundcloud.com/cornboom">
+                          <span class="spotlight-layer" aria-hidden="true"></span>
+                          <span class="spotlight-label">Soundcloud</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 项目 2：Classic 7 -->
+          <div class="vt_bulletedlist">
+            <ul class="vt_linklist">
+              <li class="featureItem">
+                <div class="vt_headline vt_image vt_desc">
+
+                  <div class="vt_imgBorder" title="Classic 7">
+                    <a href="https://classic7.lol/">
+                      <img src="/Win7_box_pro_T.png" alt="Classic 7" width="63" height="63">
+                    </a>
+                  </div>
+
+                  <div class="vt_desc">
+                    <a href="https://classic7.lol/" class="spotlight-btn">
+                      <span class="spotlight-layer" aria-hidden="true"></span>
+                      <span class="spotlight-label">Download Page</span>
+                    </a>
+
+                    <span>U can use my arts free with my name. Choose the arts right here and download it today.</span>
+
+                    <ul class="secondary_links">
+                      <li>
+                        <button type="button"
+                                class="spotlight-btn"
+                                data-href="https://classic7.lol/">
+                          <span class="spotlight-layer" aria-hidden="true"></span>
+                          <span class="spotlight-label">Download</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 项目 3：More Links -->
+          <div class="vt_bulletedlist">
+            <ul class="vt_linklist">
+              <li>
+                <div class="vt_desc">
+                  <a href="https://space.bilibili.com/3546629403576708">
+                    <span class="spotlight-layer" aria-hidden="true"></span>
+                    <span class="spotlight-label">Bilibili</span>
+                  </a>
+                  <span>My Bilibili page. U can find some videos here.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 项目 4：https://theseus-doc.pages.dev/ -->
+          <div class="vt_bulletedlist">
+            <ul class="vt_linklist">
+              <li>
+                <div class="vt_desc">
+                  <a href="https://theseus-doc.pages.dev/">
+                    <span class="spotlight-layer" aria-hidden="true"></span>
+                    <span class="spotlight-label">Theseus-doc.pages.</span>
+                  </a>
+                  <span>Discover a rhythm game dev by HydroCeder and make your hobby feel better :  )</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div><!-- /vt_lay60 -->
+
+        <!-- 右侧：More Info -->
+        <div class="vt_lay40">
+          <div class="vt_heading">More Info</div>
+          <div class="vt_bulletedlist">
+            <ul class="vt_linklist">
+              <li class="featureItem">
+                <div class="vt_desc">
+                  <button type="button" class="spotlight-btn">
+                    <span class="spotlight-layer" aria-hidden="true"></span>
+                    <span class="spotlight-label">Some Essay</span>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div><!-- /vt_col_cntnr -->
+    </div><!-- /highlightsTab -->
+
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.spotlight-btn').forEach(btn => {
+
+    // ===== 光晕追踪 =====
+    btn.addEventListener('pointermove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      btn.style.setProperty('--x', x + '%');
+      btn.style.setProperty('--y', y + '%');
+    });
+
+    btn.addEventListener('pointerleave', () => {
+      btn.style.setProperty('--x', '50%');
+      btn.style.setProperty('--y', '50%');
+    });
+
+    // ===== 按钮跳转（data-href） =====
+    if (btn.dataset.href) {
+      btn.addEventListener('click', () => {
+        window.location.href = btn.dataset.href;
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
