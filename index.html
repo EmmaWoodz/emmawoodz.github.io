@@ -22,17 +22,31 @@
     --w7-button-active-bg: linear-gradient(to bottom, #0361a3 0%, #1583d7 100%);
     --w7-button-color: #ffffff;
     --w7-button-border-color: #024b7f;
+
+    /* shadow */
+    --site-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08),
+                   0 8px 24px rgba(0, 0, 0, 0.28);
+    --icon-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08),
+                   0 2px 6px rgba(0, 0, 0, 0.22);
+    --icon-shadow-hover: 0 0 0 1px rgba(0, 0, 0, 0.08),
+                         0 6px 14px rgba(0, 0, 0, 0.28);
   }
 
   /* ============================================================
-     页面基础
+     basic
      ============================================================ */
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     min-height: 100vh;
-    background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 55%, #98FB98 100%);
+
+    background-image:
+      url("https://cdn.jsdelivr.net/gh/EmmaWoodz/emmawoodz.github.io@images/wallpaper2you_230999.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     background-attachment: fixed;
+
     font-family: 'Segoe UI', Tahoma, sans-serif;
     color: #1a3a4a;
     padding: 34px 15px 50px;
@@ -43,20 +57,21 @@
   }
 
   /* ============================================================
-     顶部欢迎图（引用仓库根目录的 welcome.png）
+     welcome.png
      ============================================================ */
   .welcome-header {
     width: 100%;
-    max-width: 720px;
+    max-width: 960px;              /* 与 .main-window 的 max-width 保持一致 */
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;   /* 左对齐 */
   }
 
   .welcome-banner {
     display: block;
-    width: 100%;
+    max-width: 100%;
     height: auto;
-    filter: drop-shadow(0 8px 16px rgba(10, 74, 112, 0.22));
+    border-radius: 4px;                    /* 与窗口圆角呼应 */
+    box-shadow: var(--site-shadow);        /* 与 .window 阴影同风格 */
     -webkit-user-drag: none;
     user-select: none;
   }
@@ -108,14 +123,30 @@
   .featureItem:hover { background: rgba(255, 255, 255, 0.6); }
 
   .vt_headline { display: flex; gap: 12px; align-items: flex-start; }
+
   .vt_imgBorder {
     flex-shrink: 0;
     width: 63px; height: 63px;
     display: flex; align-items: center; justify-content: center;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 4px;
+    overflow: hidden;                      /* 配合 cover 裁剪时保持圆角整洁 */
+    box-shadow: var(--icon-shadow);        /* 小图标使用轻量阴影 */
+    transition: box-shadow 0.2s ease;
   }
   .vt_imgBorder img { width: 63px; height: 63px; object-fit: contain; }
+
+  /* 需要“裁剪填满边框”的图片单独使用此类 */
+  .vt_imgBorder img.img-cover {
+    object-fit: cover;
+    object-position: center;
+    border-radius: 4px;
+  }
+
+  /* 悬停时图标阴影轻微增强 */
+  .featureItem:hover .vt_imgBorder {
+    box-shadow: var(--icon-shadow-hover);
+  }
 
   .vt_desc { flex: 1; min-width: 0; }
 
@@ -197,17 +228,17 @@
 </head>
 <body>
 
-<!-- 顶部欢迎图：直接引用仓库根目录的 welcome.png（GitHub Pages 根路径） -->
+<!-- 顶部欢迎图：引用 images 分支的 welcome.png（jsDelivr 直链） -->
 <div class="welcome-header">
   <img class="welcome-banner"
-       src="/welcome.png"
+       src="https://cdn.jsdelivr.net/gh/EmmaWoodz/emmawoodz.github.io@images/welcome.png"
        alt="Welcome"
        onerror="this.closest('.welcome-header').style.display='none'">
 </div>
 
 <div class="main-window window">
   <div class="title-bar">
-    <div class="title-bar-text">About Emma/CornBoom!</div>
+    <div class="title-bar-text">&nbsp;&nbsp;About Emma/CornBoom!</div>
     <div class="title-bar-controls">
       <button aria-label="Minimize" class="is-minimize"></button>
       <button aria-label="Maximize" class="is-maximize"></button>
@@ -219,7 +250,7 @@
 
     <div id="highlightsTab">
 
-      <h3 class="vrtc_dlHeader">About Emma/CornBoom!</h3>
+      <h3 class="vrtc_dlHeader">  About Emma/CornBoom!</h3>
 
       <div class="vt_col_cntnr">
         <div class="vt_lay60">
@@ -232,7 +263,8 @@
 
                   <div class="vt_imgBorder" title="CornBoom!">
                     <a href="https://soundcloud.com/cornboom">
-                      <img src="/marketold.png" alt="Lyano Market" width="63" height="63">
+                      <img src="https://cdn.jsdelivr.net/gh/EmmaWoodz/emmawoodz.github.io@images/34A63ED292EFAAD62F062B54560B0117.png"
+                           alt="Soundcloud" width="63" height="63" class="img-cover">
                     </a>
                   </div>
 
@@ -268,14 +300,15 @@
               <li class="featureItem">
                 <div class="vt_headline vt_image vt_desc">
 
-                  <div class="vt_imgBorder" title="Classic 7">
-                    <a href="https://classic7.lol/">
-                      <img src="/Win7_box_pro_T.png" alt="Classic 7" width="63" height="63">
+                  <div class="vt_imgBorder" title="Download">
+                    <a href="https://github.com/EmmaWoodz/emmawoodz.github.io/blob/music/71M3%2070%20JUMP(Instrumental%20Version%2Cfeat.Galaco).mp3">
+                      <img src="https://cdn.jsdelivr.net/gh/EmmaWoodz/emmawoodz.github.io@images/wallpaper2you_230999.jpg"
+                           alt="Classic 7" width="63" height="63" class="img-cover">
                     </a>
                   </div>
 
                   <div class="vt_desc">
-                    <a href="https://classic7.lol/" class="spotlight-btn">
+                    <a href="https://github.com/EmmaWoodz/emmawoodz.github.io/blob/music/71M3%2070%20JUMP(Instrumental%20Version%2Cfeat.Galaco).mp3" class="spotlight-btn">
                       <span class="spotlight-layer" aria-hidden="true"></span>
                       <span class="spotlight-label">Download Page</span>
                     </a>
@@ -286,7 +319,7 @@
                       <li>
                         <button type="button"
                                 class="spotlight-btn"
-                                data-href="https://classic7.lol/">
+                                data-href="https://github.com/EmmaWoodz/emmawoodz.github.io/blob/music/71M3%2070%20JUMP(Instrumental%20Version%2Cfeat.Galaco).mp3">
                           <span class="spotlight-layer" aria-hidden="true"></span>
                           <span class="spotlight-label">Download</span>
                         </button>
