@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Emma / CornBoom</title>
+  <link rel="stylesheet" href="https://unpkg.com/7.css">
+  <style>
+    :root {
+      --w7-w-titlebar-bg: linear-gradient(to bottom, #bfe8ff 0%, #9ad9ff 50%, #73c5f4 100%);
+      --w7-w-titlebar-color: #143d5a;
+      --w7-w-bg: rgba(255, 255, 255, 0.62);
+      --w7-w-border-color: rgba(255,255,255,0.8);
+
+      --w7-button-bg: linear-gradient(to bottom, #89d6ff 0%, #2da0e9 50%, #0e7ec7 50%, #3bb4f2 100%);
+      --w7-button-hover-bg: linear-gradient(to bottom, #9fe7ff 0%, #4bbaf3 50%, #1a8ad6 50%, #56c3ff 100%);
+      --w7-button-active-bg: linear-gradient(to bottom, #0d70b6 0%, #1d8ae0 100%);
+      --w7-button-color: #ffffff;
+      --w7-button-border-color: #0d5d9b;
+
+      --text: #1d3b52;
+      --heading: #0c4d72;
+      --line: rgba(12,77,114,0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-image:
+        url("https://cdn.jsdelivr.net/gh/EmmaWoodz/emmawoodz.github.io@images/wallpaper2you_230999.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      padding: 28px 16px 48px;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      color: var(--text);
+    }
+
+    .page-shell {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .banner {
+      width: 100%;
+      margin-bottom: 18px;
+    }
+
+    .banner img {
+      display: block;
+      max-width: 100%;          /* 与主页一致：按原图尺寸，超出容器才缩小 */
+      height: auto;
+      border-radius: 6px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.08),
+                  0 10px 22px rgba(0,0,0,0.2);
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 260px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .article-window {
+      width: 100%;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+
+    .article-body {
+      padding: 22px 22px 24px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .article-title {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 3vw, 2.7rem);
+      line-height: 1.2;
+      color: var(--heading);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      color: #587183;
+      font-size: 0.88rem;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+    }
+
+    .article-body h2 {
+      margin: 26px 0 12px;
+      color: var(--heading);
+      font-size: 1.35rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .article-body p {
+      margin: 0 0 18px;
+      font-size: 1.02rem;
+      line-height: 1.9;
+      color: var(--text);
+    }
+
+    .sidebar-window {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      overflow: hidden;
+    }
+
+    .sidebar-body {
+      background: rgba(255,255,255,0.12);
+      padding: 12px 12px 10px;
+    }
+
+    .sidebar-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-links li {
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-links a {
+      display: inline-block;
+      color: #0d4d77;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-thickness: 1px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .sidebar-links a:hover {
+      text-decoration-thickness: 2px;
+      color: #0a3d5d;
+    }
+
+    .callout {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    @media (max-width: 820px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="banner">
+      <img
+        src="https://cdn.jsdelivr.net/gh/EmmaWoodz/emmawoodz.github.io@images/welcome.png"
+        alt="Welcome"
+        onerror="this.style.display='none'"
+      />
+    </div>
+
+    <div class="content-grid">
+      <div class="window article-window">
+        <div class="title-bar">
+          <div class="title-bar-text">About Emma / CornBoom</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize" class="is-minimize"></button>
+            <button aria-label="Maximize" class="is-maximize"></button>
+            <button aria-label="Close" class="is-close"></button>
+          </div>
+        </div>
+
+        <div class="window-body article-body">
+          <h1 class="article-title">About Me</h1>
+
+          <div class="meta">
+            <span>Emma / CornBoom</span>
+            <span>Personal Essay</span>
+            <span>Updated 4/11/2026      </span>
+          </div>
+
+          <h2>Who I am</h2>
+
+          <p>
+            Welcome to my personal page!
+          </p>
+
+          <p>
+            I'm an electronic music producer and painter, and I've also done some graphic design work.
+          </p>
+
+          <h2>What I create</h2>
+
+          <p>
+            Some of my work is music. I make HDM (FrenchCore, SpeedCore), trance, DnB, Bass House, and other styles.
+          </p>
+
+          <p>
+            I'm also learning digital painting and graphic design. At the same time, I'm really interested in some unique design styles.
+          </p>
+
+          <h2>About this site</h2>
+
+          <p>
+            This website hosts some of my works and demos. At the same time, it's also an attempt at my website design.
+          </p>
+
+          <p>
+            I hope you can feel something unique here... maybe something weird?
+          </p>
+
+          <div class="callout">
+            <button type="button">Read More</button>
+            <button type="button">Back to Home</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="window sidebar-window">
+        <div class="title-bar">
+          <div class="title-bar-text">Essay Index</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize" class="is-minimize"></button>
+            <button aria-label="Maximize" class="is-maximize"></button>
+            <button aria-label="Close" class="is-close"></button>
+          </div>
+        </div>
+
+        <div class="window-body sidebar-body">
+          <ul class="sidebar-links">
+            <li><a href="#">Nothing</a></li>
+            <li><a href="#">Nothing</a></li>
+            <li><a href="#">Nothing</a></li>
+            <li><a href="#">Nothing</a></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>
